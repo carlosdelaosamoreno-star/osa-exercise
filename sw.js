@@ -28,4 +28,5 @@ async function serve(req,rel){if(!await getKey())return null;let I;try{I=await i
 self.addEventListener('fetch',e=>{const r=e.request,u=new URL(r.url);if(r.method!=='GET'||u.origin!==location.origin||!u.pathname.startsWith(SCOPE))return;
  const rel=decodeURIComponent(u.pathname.slice(SCOPE.length));
  if(rel===''||rel==='index.html'||rel==='lock.js'||rel==='lock.json'||rel==='sw.js'||rel==='manifest.webmanifest'||rel==='icon-192.png'||rel==='icon-512.png'||rel==='favicon.ico'||rel.startsWith('enc/'))return;
+ if(r.mode==='navigate')IDX=null;// cada apertura relee el índice: nunca se queda una versión vieja en memoria
  e.respondWith(serve(r,rel).then(x=>x||(r.mode==='navigate'?Response.redirect(SCOPE,302):new Response('Bloqueado',{status:403}))).catch(()=>new Response('Error',{status:500})))});
